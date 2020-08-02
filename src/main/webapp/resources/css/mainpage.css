@@ -1,0 +1,38 @@
+
+body { padding-top: 3.5rem; }
+
+#first-cover{
+  background-size: cover !important;
+  background-position: center center !important;
+  height: 50vh !important;
+  display: flex !important;
+  margin-bottom: 0px;
+}
+#second-cover{
+  background-size: cover !important;
+  background-position: center center !important;
+  height: 50vh !important;
+  display: flex !important;
+  margin-bottom: 0px;
+}
+#third-cover{
+  background-size: cover !important;
+  background-position: center center !important;
+  height: 40vh !important;
+  display: flex !important;
+  margin-bottom: 0px;
+}
+.site-header a {
+  transition: ease-in-out color .15s;
+}
+
+@media (max-width: 700px) {
+  p.about-text {
+    font-size: 1.0rem !important;
+  }
+}
+@media (min-width: 700px) {
+  p.about-text{
+    font-size: 1.3rem !important;
+  }
+}

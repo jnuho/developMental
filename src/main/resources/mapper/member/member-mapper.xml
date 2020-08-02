@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="member">
+	
+  <resultMap id="clobMap" type="jobBoard">
+    <result property="content" column="CONTENT" jdbcType="CLOB" javaType="java.lang.String"
+      typeHandler="clobType" />
+    <result property="applicants" column="APPLICANTS" />
+    <result property="fileNewName" column="FILENEWNAME" />
+  </resultMap>
+	
+	<!-- 게시판 -->
+	
+	<select id="selectPageJobMyBoardList" parameterType="String" resultMap="clobMap">
+	   SELECT J.*, (SELECT COUNT(*) FROM APPLY_JOB WHERE J.NO = MEMBERNO) AS APPLICANTS,
+	      (select newname from FILE_BOARD_JOB F where J.NO = F.BOARDNO) AS FILENEWNAME
+	      FROM BOARD_JOB J WHERE WRITER=#{nickname} AND STATUS='1' ORDER BY REGDATE DESC
+  	</select>
+  	
+  	<select id="selectJobMyBoardCount" parameterType="String" resultType="_int">
+    	SELECT COUNT(*) FROM BOARD_JOB WHERE WRITER=#{nickname}
+  	</select>
+  	
+  	<select id="selectMyStudyBoardCount" parameterType="String" resultType="_int">
+		 select count(*) from board_meetup WHERE WRITER=#{nickname}
+	</select>
+	
+	<select id="selectStudyMyBoardList" parameterType="String" resultType="com.kh.workman.member.model.vo.MyStudyBoard">
+	 SELECT * FROM BOARD_MEETUP WHERE WRITER=#{nickname} ORDER BY REGDATE DESC
+	</select>
+	
+	<update id="updateMyJobBoardStatus" parameterType="_int">
+		UPDATE BOARD_JOB SET STATUS='0' WHERE NO=#{no} 
+	</update>
+	
+	<update id="updateMyStudyBoardStatus" parameterType="_int">
+		UPDATE BOARD_MEETUP SET STATUS='0' WHERE NO=#{no} 
+	</update>
+	
+	<update id="updateMyJobBoardContent" parameterType="com.kh.workman.member.model.vo.MyStudyBoard">
+		UPDATE BOARD_JOB SET CONTENT=#{content},TITLE=#{title} WHERE NO= #{no}
+	</update>
+	
+	<update id="updateMyStudyBoardContent" parameterType="com.kh.workman.member.model.vo.MyStudyBoard">
+		UPDATE BOARD_MEETUP SET CONTENT=#{content},TITLE=#{title} WHERE NO= #{no}
+	</update>
+	
+	<update id="updatedeleteMember" parameterType="com.kh.workman.member.model.vo.Member">
+		UPDATE MEMBER SET STATUS='0' WHERE ID=#{id}
+	</update>
+  	
+	
+	<!-- END 게시판 -->
+	
+	
+	<select id="selectFindEmail" parameterType="String" resultType="com.kh.workman.member.model.vo.Member">
+		SELECT * FROM MEMBER WHERE EMAIL=#{tomail}
+	</select>
+	
+	<update id="updateMemberEmail" parameterType="com.kh.workman.member.model.vo.Member">
+		UPDATE MEMBER SET PW=#{pw} WHERE status=1 and EMAIL=#{email}
+	</update>
+	
+	
+	<select id="selectMemberCount" resultType="_int">
+		SELECT COUNT(*) FROM Member
+	</select>
+	
+	<select id="selectMemberList" resultType="adminMember">
+		SELECT * FROM MEMBER ORDER BY NO
+	</select>
+	
+	<update id="memberReport" parameterType="_int">
+		UPDATE MEMBER SET REPORTCOUNT=REPORTCOUNT+1 WHERE REPORTCOUNT <![CDATA[<]]>3 AND NO=#{no}
+	</update>
+	<update id="memberReportEnd" parameterType="_int">
+		UPDATE MEMBER SET STATUS=0, REPORTCOUNT=REPORTCOUNT+1  WHERE NO=#{no}
+	</update>
+	
+	<select id="selectMemberNickname" resultType="member">
+		SELECT * FROM MEMBER WHERE NICKNAME=#{nickname}
+	</select>
+
+	<update id="statusUpdate" parameterType="map">
+		UPDATE MEMBER SET STATUS=#{status} WHERE NO=#{no}
+	</update>
+	
+	<update id="updateInfoMember" parameterType="com.kh.workman.member.model.vo.Member">
+	<choose>
+	<when test="pw == null || pw == '' ">
+		UPDATE MEMBER SET NICKNAME=#{nickname},PROFILE=#{profile},TEL=#{tel},ADDR=#{addr} WHERE ID=#{id}
+	</when>
+	<otherwise>
+		UPDATE MEMBER SET NICKNAME=#{nickname},PW=#{pw}, PROFILE=#{profile},TEL=#{tel},ADDR=#{addr} WHERE ID=#{id}
+	</otherwise>	
+	</choose>
+	</update>
+	
+	<delete id="deleteMember" parameterType="map">
+		DELETE FROM MEMBER WHERE ID=#{id}
+	</delete>
+	
+	<select id="selectMember" resultType="map" parameterType="string">
+		SELECT * FROM MEMBER where ID=#{id}
+	</select>
+	
+	<select id="listAll" resultType="adminMember">
+		SELECT * FROM MEMBER
+			<include refid="search"></include>
+	</select>
+	<select id="countArticle" resultType="_int">
+		SELECT COUNT(*) FROM MEMBER
+			<include refid="search"></include>
+	</select>
+	
+	<!-- sql 조각코드 -->
+	<sql id="search">
+		<choose>
+			<!-- 전체검색 -->
+			<when test="searchType == 'all'">
+				WHERE ID LIKE '%'||#{keyword}||'%'
+				OR NAME LIKE '%'||#{keyword}||'%'
+				OR  NICKNAME '%'||#{keyword}||'%'
+				OR STATUS LIKE '%'||#{keyword}||'%'
+				OR EMAIL LIKE '%'||#{keyword}||'%'
+			</when>
+			<!-- 전체검색 아닐 때 -->
+			<otherwise>
+				WHERE ${searchType} LIKE '%'||#{keyword}||'%'
+			</otherwise>
+		</choose>
+	</sql>
+	
+	
+
+  <select id="selectLogin" parameterType="com.kh.workman.member.model.vo.Member" resultType="com.kh.workman.member.model.vo.Member">
+  	SELECT * FROM MEMBER WHERE status=1 and id=#{id}
+  </select>
+  
+  <insert id="insertMember" parameterType="com.kh.workman.member.model.vo.Member">
+  	INSERT INTO MEMBER VALUES(DEFAULT,#{id},#{pw},#{name},#{nickname},#{email},#{addr},#{tel},DEFAULT,DEFAULT,DEFAULT,DEFAULT,NULL,DEFAULT,0)
+  </insert>
+  
+  <select id="selectAllMemberSearch" resultType="com.kh.workman.member.model.vo.Member">
+  	SELECT ID, NICKNAME, PROFILE FROM MEMBER WHERE STATUS = 1 AND NOT ID = '2010vienna'
+  </select>
+  
+  <select id="selectApplylist"  parameterType="String" resultType="map">
+  		select t2.boardno, t2.memberno, t3.nickname from board_meetup t1, apply_meetup t2 , member t3 where t1.no = t2.boardno and t2.memberno = t3.no and t1.writer=#{nickname} order by boardno desc
+  </select>
+  
+</mapper>

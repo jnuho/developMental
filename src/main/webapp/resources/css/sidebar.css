@@ -1,0 +1,113 @@
+a,
+a:hover,
+a:focus {
+    color: inherit;
+    transition: all 0.3s;
+}
+
+/* ---------------------------------------------------
+    SIDEBAR STYLE
+----------------------------------------------------- */
+
+#sidebar {
+    width: 190px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    z-index: 999;
+    background: #7386D5;
+    color: #fff;
+    transition: all 0.3s;
+}
+
+#sidebar.active {
+    margin-left: -190px;
+}
+
+.sidebar-header{
+  background-image: url("../images/luca-bravo-XJXWbfSo2f0-unsplash.jpg");
+  background-size: cover !important;
+  background-position: center center !important;
+  height: 10vh !important;
+  display: flex !important;
+  margin-bottom: 0px;
+    padding: 20px;
+}
+#sidebar{
+    padding: 20px;
+    background: #0a0b0c;
+    margin-top: 58px;
+}
+
+#sidebar ul.components {
+    padding: 20px 0;
+    /* border-bottom: 1px solid #397897; */
+}
+
+#sidebar ul p {
+    color: #fff;
+    padding: 10px;
+}
+
+#sidebar ul li a {
+    padding: 10px;
+    font-size: 1.1em;
+    display: block;
+}
+
+#sidebar ul li a:hover {
+  background: #1DA1F2 !important;
+  border-radius: 10px;
+  margin-left: 10px;
+  margin-right: 10px;
+  text-decoration: none;
+}
+
+#sidebar ul li.active>a,
+a[aria-expanded="true"] {
+    color: #fff;
+    background: #1a1b22;
+}
+
+a[data-toggle="collapse"] {
+    position: relative;
+}
+
+.sidebar-dropdown-toggle::after {
+    display: block;
+    position: absolute;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
+}
+
+ul ul a {
+    font-size: 0.9em !important;
+    padding-left: 30px !important;
+    background: #000000;
+}
+
+ul.CTAs {
+    padding: 20px;
+}
+
+ul.CTAs a {
+    text-align: center;
+    font-size: 0.9em !important;
+    display: block;
+    border-radius: 5px;
+    margin-bottom: 5px;
+}
+
+a.download {
+    background: #fff;
+    color: rgb(49, 72, 167);
+}
+
+a.article,
+a.article:hover {
+    background: #0e289b !important;
+    color: #fff !important;
+}
+

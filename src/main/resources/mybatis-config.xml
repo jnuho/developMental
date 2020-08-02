@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd" >
+
+
+<!-- connection info는 root-context에서 설정됨. 여기서는 type alias 등 설정 -->
+<configuration>
+  <!-- 쿼리문 where절 parameter에 generic 값들(e.g. NULL, VARCHAR or OTHER)을  허용 -->
+  <settings>
+    <setting name="jdbcTypeForNull" value="NULL"/>
+  </settings>
+
+  <typeAliases>
+	
+	<!-- Job board CLOB type handler alias-->
+    <typeAlias type="org.apache.ibatis.type.ClobTypeHandler" alias="clobType" />
+	
+    <typeAlias type="com.kh.workman.common.ArrayTypeHandler" alias="arrType" />
+    
+    <typeAlias type="com.kh.workman.admin.model.vo.Faq" alias="faq" />
+    <typeAlias type="com.kh.workman.admin.model.vo.AdminMember" alias="adminMember" />
+    <typeAlias type="com.kh.workman.admin.model.vo.AdminAttachment" alias="adminAttachment" />
+    <typeAlias type="com.kh.workman.admin.model.vo.AdminNotice" alias="adminNotice" />
+	<typeAlias type="com.kh.workman.member.model.vo.Member" alias="member"/>
+
+    <!-- Collabo -->
+    <typeAlias type="com.kh.workman.collabo.model.vo.CollaboList" alias="collaboList" />
+    <typeAlias type="com.kh.workman.collabo.model.vo.CollaboCard" alias="collaboCard" />
+    <typeAlias type="com.kh.workman.collabo.model.vo.CollaboTool" alias="collaboTool" />
+    <typeAlias type="com.kh.workman.collabo.model.vo.CollaboMember" alias="collaboMember" />
+
+    <!-- Job -->
+    <typeAlias type="com.kh.workman.job.model.vo.JobBoard" alias="jobBoard" />
+    <typeAlias type="com.kh.workman.job.model.vo.JobBoardFile" alias="jobBoardFile" />
+    <typeAlias type="com.kh.workman.job.model.vo.JobApply" alias="jobApply" />
+    
+    <!-- Hashtag -->
+    <typeAlias type="com.kh.workman.hashtag.model.vo.Hashtag" alias="hashtag" />
+    
+
+	<!-- Study -->
+	 <typeAlias type="com.kh.workman.study.model.vo.StudyBoard" alias="studyboard" />
+
+
+  </typeAliases>
+
+	 
+	 
+	 
+	 
+	 
+  <!-- Job board CLOB type handler -->
+  <!-- <typeHandler handler="org.apache.ibatis.type.ClobTypeHandler" jdbcType="CLOB" javaType="java.lang.String"/> -->
+
+</configuration>

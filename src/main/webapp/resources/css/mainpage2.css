@@ -1,0 +1,71 @@
+
+.back-to-top {
+    z-index: 100;
+    position: fixed;
+    bottom: 80px;
+    right: 80px;
+    display: none;
+    /* background-color: yellow;
+    border: .5px solid black; */
+}
+
+
+.site-header { /* custom transparent header */
+  background-color: rgba(19, 37, 53, .80);
+}
+.site-header a {
+  transition: ease-in-out color .15s;
+}
+
+#main-search-area{
+  background-image: url("../images/cover.jpg");
+  background-size: cover !important;
+  background-position: center center !important;
+  height: 100vh !important;
+  display: flex !important;
+  margin-bottom: 0px;
+  text-shadow:
+    1.5px 1.5px 0px #132535;
+}
+
+.help{
+  background-color: #132535;
+}
+
+textarea.review_content{
+  resize: none;
+}
+
+@media (max-width: 700px) {
+  p.about-text {
+    font-size: 1.0rem !important;
+  }
+}
+@media (min-width: 700px) {
+  p.about-text{
+    font-size: 1.3rem !important;
+  }
+}
+
+.carousel-control-next,
+.carousel-control-prev {
+  filter: invert(100%) !important;
+}
+
+.carousel-indicators li {
+  width: 12px;
+  height: 12px;
+  border-radius: 100%;
+  background-color: slategrey;
+}
+ol.carousel-indicators li.active {
+  background-color: yellow;
+}
+
+#carousel_about .carousel-item > img {
+  min-width: 100vw;
+  height: 50vh;
+  max-width: none;
+  object-fit:cover;
+  object-position:center;
+}

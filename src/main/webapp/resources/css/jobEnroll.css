@@ -1,0 +1,56 @@
+
+.companyLogo-wrapper {
+  position: relative;
+  height: 90px;
+  width: 90px;
+  margin: 20px auto;
+  border-radius: 50%;
+  overflow: hidden;
+  box-shadow: 1px 1px 15px -5px #000000;
+  transition: all .3s ease;
+}
+.companyLogo-wrapper:hover {
+  transform: scale(1.1);
+  cursor: pointer;
+}
+.companyLogo-wrapper:hover .logo-pic {
+  opacity: .2;
+}
+.companyLogo-wrapper .logo-pic {
+  height: 100%;
+  width: 100%;
+  transition: all .3s ease;
+}
+.companyLogo-wrapper .logo-pic:after {
+  font-family: FontAwesome;
+  content: "\f1ad";
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  font-size: 55px;
+  background: #ecf0f1;
+  color: #e9a11b;
+  text-align: center;
+}
+.companyLogo-wrapper .upload-button {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+}
+.companyLogo-wrapper .upload-button .fa-camera{
+  position: absolute;
+  font-size: 50px;
+  top: 20px;
+  left: 18px;
+  text-align: center;
+  opacity: 0;
+  transition: all .3s ease;
+  color: #4f6f8f;
+}
+.companyLogo-wrapper .upload-button:hover .fa-camera{
+  opacity: .9;
+}

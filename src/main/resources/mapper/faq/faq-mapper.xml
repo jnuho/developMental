@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="faq">
+
+
+	<insert id="insertFaq" parameterType="map">
+		INSERT INTO FAQ VALUES(SEQ_FAQNO.NEXTVAL, #{faqTitle}, #{faqContent}, '기타')
+	</insert>
+	
+	<select id="selectFaqCount" resultType="_int">
+		SELECT COUNT(*) FROM FAQ
+	</select>
+	
+	<select id="selectFaqList" resultType="faq">
+		SELECT * FROM FAQ ORDER BY FAQNO
+	</select>
+	
+	<delete id="deleteFaq" parameterType="map">
+		DELETE FROM FAQ WHERE FAQNO=#{faqNo}
+	</delete>
+
+</mapper>

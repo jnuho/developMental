@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="study">
+ 
+	<select id="selectStudyBoardCount" resultType="_int">
+
+		 SELECT COUNT(*) FROM BOARD_MEETUP
+
+	</select>
+	
+	<select id="selectStudyBoardList" resultType="map">
+	 SELECT * FROM BOARD_MEETUP ORDER BY REGDATE DESC
+	</select>
+
+	
+	<insert id="insertStudyBoard" parameterType="map">
+		 INSERT INTO BOARD_MEETUP VALUES(SEQ_BOARD_MEETUP.NEXTVAL, #{writer}, #{title}, #{content}, SYSDATE, 0, 1)
+	</insert>
+	<insert id="study.ApplyStudy" parameterType="map">
+		INSERT INTO APPLY_MEETUP VALUES(#{no}, (SELECT NO FROM MEMBER WHERE ID= #{logininfo}))
+	</insert>
+
+</mapper>

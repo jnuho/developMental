@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!-- workman파일 -->
+<mapper namespace="freeboard">
+	<!-- 변경문 -->
+	
+	<select id="selectBoardCount" resultType="_int">
+		SELECT COUNT(*) FROM BOARD_FREE
+	</select>
+	
+	<select id="selectBoardList" resultType="map">
+		SELECT A.*,(SELECT COUNT(*) FROM ATTACHMENT WHERE NOTICENO = A.NO) AS ATTACHCOUNT FROM BOARD_FREE A ORDER BY REGDATE DESC
+	</select>
+	
+	<insert id="insertBoard" parameterType="map">
+		INSERT INTO BOARD_FREE VALUES(SEQ_NO.NEXTVAL, #{Writer}, #{Title}, #{Content}, DEFAULT, DEFAULT, DEFAULT)
+		<selectKey keyProperty="No" resultType="string" order="AFTER">
+			SELECT SEQ_NO.CURRVAL FROM DUAL
+		</selectKey>
+	</insert>
+	
+	<insert id="insertAttachment" parameterType="com.kh.workman.freeboard.model.vo.Attachment">
+		INSERT INTO ATTACHMENT VALUES(SEQ_ATTACHMENTNO.NEXTVAL, #{noticeNo}, #{originalFileName}, #{renamedFileName}, DEFAULT, DEFAULT, DEFAULT)
+	</insert>
+	
+	<select id="selectBoard" resultType="map" parameterType="_int">
+		SELECT * FROM BOARD_FREE WHERE NO=#{No}
+	</select>
+	
+	<select id="selectAttachList" resultType="com.kh.workman.freeboard.model.vo.Attachment" parameterType="_int">
+		SELECT * FROM ATTACHMENT WHERE NOTICENO=#{noticeNo}
+	</select>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+		<!-- 원문 -->		
+<!-- 	<select id="selectBoardCount" resultType="_int"> -->
+<!-- 		SELECT COUNT(*) FROM BOARD -->
+<!-- 	</select> -->
+	
+<!-- 	<select id="selectBoardList" resultType="map"> -->
+<!-- 		SELECT A.*,(SELECT COUNT(*) FROM ATTACHMENT WHERE BOARDNO=A.BOARDNO) AS ATTACHCOUNT FROM BOARD A ORDER BY BOARDDATE DESC	 -->
+<!-- 	</select> -->
+	
+<!-- 	<insert id="insertBoard" parameterType="map"> -->
+<!-- 		INSERT INTO BOARD VALUES(SEQ_BOARDNO.NEXTVAL, #{boardTitle},#{boardWriter},#{boardContent},DEFAULT,DEFAULT) -->
+<!-- 		<selectKey keyProperty="boardNo" resultType="string" order="AFTER"> -->
+<!-- 			SELECT SEQ_BOARDNO.CURRVAL FROM DUAL -->
+<!-- 		</selectKey> -->
+<!-- 	</insert> -->
+	
+<!-- 	<insert id="insertAttachment" parameterType="com.kh.spring.board.model.vo.Attachment"> -->
+<!-- 		INSERT INTO ATTACHMENT VALUES(SEQ_ATTACHMENTNO.NEXTVAL, #{boardNo}, #{originalFileName}, #{renamedFileName}, DEFAULT, DEFAULT, DEFAULT) -->
+<!-- 	</insert> -->
+	
+<!-- 	<select id="selectBoard" resultType="map" parameterType="_int"> -->
+<!-- 		SELECT * FROM BOARD WHERE BOARDNO=#{boardNo} -->
+<!-- 	</select> -->
+	
+<!-- 	<select id="selectAttachList" resultType="com.kh.spring.board.model.vo.Attachment" parameterType="_int"> -->
+<!-- 		SELECT * FROM ATTACHMENT WHERE BOARDNO=#{boardNo} -->
+<!-- 	</select> -->
+	
+	
+	
+	
+	
+	
+</mapper>

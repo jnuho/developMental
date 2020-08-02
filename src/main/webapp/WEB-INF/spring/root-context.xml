@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:security="http://www.springframework.org/schema/security"
+  xmlns:aop="http://www.springframework.org/schema/aop"
+  xmlns:tx="http://www.springframework.org/schema/tx"
+  xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-5.0.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
+  
+  <!-- root-context.xml
+    defines shared resources visible to all other web components.
+    root-context.xml 은 스프링 돌아가는데 필요한것을  담고 있음
+        스프링은 객체들에 의해 돌아간다. 여기에 디비에 대한 설정이 들어간다.
+  -->
+  <!-- DB JDBC MYBATIS 설정 (pom.xml에서 필요한 resource 저장해놓음) jar file -> dependency 등록 -->
+  <!-- mybatis-config.xml을 spring에 맞게 수정.
+    Spring이 시작하면서 이용할 수 있는 객체로 등록됨
+    Spring 설정파일: BasicDataSource를 spring/spring 계정에게 부여. spring bean 등록
+    close 생성자를 이용해서 destroy. Spring xml 파일을 보고 생성자를 생성. 연결내용.
+    DB에 필요한 데이터를 BasicDataSource객체에 값을 넣음 setter(=property)
+  -->
+  <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+    <property name="driverClassName" value="oracle.jdbc.driver.OracleDriver"/>
+    <property name="url" value="jdbc:oracle:thin:@rclass.iptime.org:1521:xe"/>
+    <!-- <property name="url" value="jdbc:oracle:thin:@localhost:1521:xe"/> -->
+    <property name="username" value="workman"/>
+    <property name="password" value="workman"/>
+  </bean>                                            
+
+  <!-- Mybatis에서 SqlSession 객체를 생성하는 FactoryBean 을 springbean으로 등록 
+    Mybatis Spring jar파일에 있는 객체를 씀 객체생성 멤버변수로 BasicDataSource -->
+  <bean id="sqlSessionFactoryBean" class="org.mybatis.spring.SqlSessionFactoryBean">
+    <property name="dataSource" ref="dataSource"/>
+    <property name="mapperLocations" value="classpath*:mapper/**/*.xml"/>
+    <property name="configLocation" value="classpath:mybatis-config.xml"/>
+  </bean>
+  
+  <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+  	<property name="location" value="classpath:/properties/config.properties"/>
+  </bean>
+  
+   <!-- Gmail -->
+  <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+    <property name="host" value="smtp.gmail.com" />
+    <property name="port" value="587" />
+    <property name="username" value="${gmail}" />
+    <property name="password" value="${pw}" />
+    <property name="javaMailProperties">
+    <props>
+      <prop key="mail.smtp.auth">true</prop>
+      <prop key="mail.smtp.starttls.enable">true</prop>
+    </props>
+    </property>
+  </bean>
+
+  <!-- SessionTemplate을 springbean으로 등록하여 활용 -->
+  <bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
+    <constructor-arg index="0" ref="sqlSessionFactoryBean"/>
+  </bean> 
+  
+
+
+  <!-- bean to be handled by transaction (spring provided) -->
+  <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+    <property name="dataSource" ref="dataSource"/>
+  </bean>
+
+  <!-- 1declaration -->
+  <tx:advice id="txAdvice" transaction-manager="transactionManager">
+    <tx:attributes>
+      <tx:method name="insert*" rollback-for="Exception"/>
+      <tx:method name="update*" rollback-for="Exception"/>
+      <tx:method name="delete*" rollback-for="Exception"/>
+    </tx:attributes>
+  </tx:advice>
+
+  <aop:config>
+    <aop:pointcut expression="execution(* com.kh.workman..*ServiceImpl.*(..))" id="serviceMethod"/>
+    <aop:advisor advice-ref="txAdvice" pointcut-ref="serviceMethod"/>
+  </aop:config>
+
+  <!-- 2anno -->
+  <!-- <tx:annotation-driven transaction-manager="transactionManager"/> -->
+
+</beans>

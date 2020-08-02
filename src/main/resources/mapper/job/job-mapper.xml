@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="job">
+  <!-- CLOB type maps to java.lang.String -->
+  <resultMap id="clobMap" type="jobBoard">
+    <result property="content" column="CONTENT" jdbcType="CLOB" javaType="java.lang.String"
+      typeHandler="clobType" />
+    <result property="applicants" column="APPLICANTS" />
+    <result property="fileNewName" column="FILENEWNAME" />
+  </resultMap>
+
+  <select id="selectApplyCount" resultType="_int">
+    select count(*) AS applicants from apply_job
+  </select>
+
+  <!-- <select id="selectJobBoardOne" resultType="jobBoard" resultMap="jobBoardMap"> -->
+  <select id="selectJobBoardOne" parameterType="_int" resultType="HashMap" resultMap="clobMap">
+    SELECT * FROM BOARD_JOB WHERE 1=1 AND NO=#{no} AND STATUS=1
+  </select>
+
+  <select id="selectJobBoardWriter" resultType="HashMap" resultMap="clobMap">
+    SELECT * FROM BOARD_JOB WHERE 1=1 AND WRITER=#{writer}
+  </select>
+  
+
+  <select id="selectPageJobBoardList" resultMap="clobMap">
+    SELECT J.*,
+      (SELECT COUNT(*) FROM APPLY_JOB WHERE J.NO = BOARDNO AND J.WRITER=M.NICKNAME) AS APPLICANTS,
+      (SELECT NEWNAME FROM FILE_BOARD_JOB F WHERE J.NO = F.BOARDNO) AS FILENEWNAME,
+      (SELECT LISTAGG(NAME,', ') WITHIN GROUP(ORDER BY NAME)
+        FROM HASHTAG H JOIN HASHTAG_JOB HJ
+        ON HJ.HASHTAGNO = H.NO WHERE HJ.boardNo = J.no) AS HASHTAGS
+    FROM BOARD_JOB J JOIN MEMBER M ON J.WRITER = M.NICKNAME
+    WHERE J.STATUS=1
+      ORDER BY J.REGDATE DESC
+  </select>
+
+  <select id="selectJobBoardCount" resultType="_int">
+    SELECT COUNT(*) FROM BOARD_JOB WHERE STATUS=1
+  </select>
+  
+  <select id="selectJobBoardSeq" resultType="_int">
+    select BOARD_JOB_SEQ.currval from dual
+  </select>
+
+  <insert id="insertJobBoard" parameterType="jobBoard">
+    insert into BOARD_JOB values(default, #{writer}, #{title},
+        #{content, typeHandler=clobType}, default,default,default)
+  </insert>
+
+  <insert id="insertJobBoardFile" parameterType="jobBoardFile">
+    insert into FILE_BOARD_JOB values(#{boardNo}, #{orgName}, #{newName})
+  </insert>
+
+  <insert id="insertJobApply" parameterType="jobApply">
+    insert into APPLY_JOB values(#{boardNo}, #{memberNo}, #{resume}, #{intro})
+  </insert>
+
+</mapper>

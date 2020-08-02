@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="hashtag">
+
+  <select id="selectHashtag" resultType="hashtag">
+    SELECT * FROM HASHTAG WHERE NAME = #{name}
+  </select>
+
+  <insert id="insertHashtag">
+    MERGE INTO HASHTAG
+      USING DUAL
+      ON (NAME = #{name})
+    WHEN MATCHED THEN
+      UPDATE SET
+      COUNT = COUNT+1
+    WHEN NOT MATCHED THEN
+      INSERT (NO, NAME, COUNT) 
+      VALUES (DEFAULT, #{name}, 1)
+  </insert>
+
+  <insert id="insertJobHashtag">
+    INSERT INTO HASHTAG_JOB VALUES(#{boardNo}, #{hashtagNo})
+  </insert>
+</mapper>

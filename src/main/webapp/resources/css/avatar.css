@@ -1,0 +1,58 @@
+
+.avatar-wrapper {
+  position: relative;
+  height: 90px;
+  width: 90px;
+  margin: 20px auto;
+  border-radius: 50%;
+  overflow: hidden;
+  box-shadow: 1px 1px 15px -5px #000000;
+  transition: all .3s ease;
+}
+.avatar-wrapper:hover {
+  transform: scale(1.1);
+  cursor: pointer;
+}
+.avatar-wrapper:hover .profile-pic {
+  opacity: 0;
+}
+.avatar-wrapper .profile-pic {
+  height: 100%;
+  width: 100%;
+  transition: all .3s ease;
+}
+.avatar-wrapper .profile-pic:after {
+  font-family: FontAwesome;
+  content: "\f007";
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  font-size: 80px;
+  background: #ecf0f1;
+  color: #34495e;
+  text-align: center;
+}
+.avatar-wrapper .upload-button {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+}
+.avatar-wrapper .upload-button .fa-camera{
+  position: absolute;
+  font-size: 50px;
+  top: 20px;
+  left: 18px;
+  text-align: center;
+  opacity: 0;
+  transition: all .3s ease;
+  color: #34495e;
+}
+
+.file
+.avatar-wrapper .upload-button:hover .fa-camera{
+  opacity: .9;
+}

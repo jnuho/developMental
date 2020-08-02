@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="adminNotice">
+
+	<select id ="selectNoticeCount"  resultType="_int">
+		SELECT COUNT(*) FROM NOTICE
+	</select>
+	<select id="selectNoticeList" resultType="adminNotice">
+<!-- 		SELECT A.*,(SELECT COUNT(*) FROM ATTACHMENT WHERE BOARDNO=A.BOARDNO) AS ATTACHCOUNT FROM BOARD A ORDER BY BOARDDATE DESC -->
+		SELECT * FROM NOTICE
+	</select>
+	
+	<insert id="insertNotice" parameterType="map">
+		INSERT INTO NOTICE VALUES(SEQ_NOTICENO.NEXTVAL, #{noticeTitle},#{noticeWriter},#{noticeContent},DEFAULT,DEFAULT)
+		<selectKey keyProperty="noticeNo" resultType="string" order="AFTER">
+			SELECT SEQ_NOTICENO.CURRVAL FROM DUAL
+		</selectKey>
+	</insert>
+	
+	<insert id="insertAttachment" parameterType="com.kh.workman.admin.model.vo.AdminAttachment">
+		INSERT INTO ATTACHMENT VALUES(SEQ_ATTACHMENTNO.NEXTVAL, #{noticeNo}, #{originalFileName}, #{renamedFileName}, DEFAULT, DEFAULT, DEFAULT)
+	</insert>
+	
+	<delete id="deleteNotice" parameterType="map">
+		DELETE FROM NOTICE WHERE NOTICENO=#{noticeNo}
+	</delete>
+	
+	<select id="selectAttchList" resultType="adminAttachment">
+		SELECT * FROM ATTACHMENT
+	</select>
+	
+	<select id="selectNoticeOne" parameterType="_int" resultType="adminNotice">
+		SELECT * FROM NOTICE WHERE NOTICENO=#{noticeNo}
+	</select>
+	<select id="selectAttachment" resultType="adminAttachment" parameterType="_int">
+		SELECT * FROM ATTACHMENT WHERE NOTICENO=#{noticeNo}
+	</select>
+	
+	<update id="updateNotice" parameterType="map">
+		UPDATE NOTICE SET NOTICETITLE=#{noticeTitle}, NOTICECONTENT=#{noticeContent}, NOTICEDATE=DEFAULT WHERE NOTICENO=#{noticeNo}
+	</update>
+	<update id="updateAttachment" parameterType="adminAttachment">
+		
+	</update>
+
+</mapper>
